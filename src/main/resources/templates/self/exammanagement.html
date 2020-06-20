@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" name="viewport">
+  <title>试题管理</title>
+
+  <link rel="stylesheet" href="../dist/modules/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/modules/ionicons/css/ionicons.min.css">
+  <link rel="stylesheet" href="../dist/modules/fontawesome/web-fonts-with-css/css/fontawesome-all.min.css">
+
+  <link rel="stylesheet" href="../plugin/layui/css/layui.css">
+
+  <link rel="stylesheet" href="../dist/css/demo.css">
+  <link rel="stylesheet" href="../dist/css/style.css">
+</head>
+
+<body>
+  <div id="app" v-if="loginUser != null">
+    <div class="main-wrapper">
+      <div class="navbar-bg"></div>
+      <nav class="navbar navbar-expand-lg main-navbar">
+        <form class="form-inline mr-auto">
+          <ul class="navbar-nav mr-4">
+            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="ion ion-navicon-round"></i></a></li>
+            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="ion ion-search"></i></a></li>
+          </ul>
+        </form>
+        <ul class="navbar-nav navbar-right">
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg">
+            <i class="ion ion-android-person d-lg-none"></i>
+<!--            <div class="d-sm-none d-lg-inline-block" v-if="loginUser != null && loginUser.username != null" v-cloak>欢迎{{ loginUser.username }}</div></a>-->
+
+              <div class="d-sm-none d-lg-inline-block" v-cloak>欢迎孙少安</div></a>
+
+
+              <div class="dropdown-menu dropdown-menu-right">
+              <a href="profile.html" class="dropdown-item has-icon">
+                <i class="ion ion-android-person"></i> 修改密码
+              </a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+      <div class="main-sidebar">
+        <aside id="sidebar-wrapper">
+          <div class="sidebar-brand">
+            <a href="/home">首页</a>
+          </div>
+          <div class="sidebar-user">
+            <div class="sidebar-user-picture" v-cloak>
+<!--              <img v-if="loginUser.img != null" alt="image" :src=" '../updateFile/img/avatar/' + loginUSer.img">-->
+              <img alt="image" src="../dist/img/avatar/avatar-1.jpeg">
+            </div>
+            <div class="sidebar-user-details" v-cloak>
+<!--              <div class="user-name" v-if="loginUser != null && loginUser.realName != null">{{ loginUser.realName }}</div>-->
+<!--              <div class="user-role" v-if="loginUser != null && loginUser.role.roleName != null">-->
+<!--                {{loginUser.role.roleName}}-->
+<!--              </div>-->
+
+                <div class="user-name" > phy1 </div>
+                <div class="user-role">
+                   咨询师
+                </div>
+
+            </div>
+          </div>
+            <ul class="sidebar-menu" style="overflow: auto; height: 450px;">
+                <li class="menu-header">个人中心</li>
+                <li class="active">
+                    <a href="/self/index"><i class="ion ion-speedometer"></i><span>个人中心</span></a>
+                </li>
+
+                <li class="menu-header">咨询</li>
+                <li><a href="/getAllCounsellingRecord"><i class="ion ion-ios-circle-outline"></i> 我的咨询记录</a></li>
+                <li>
+                    <a v-if="loginUser.role.roleName != '咨询师' " href="/getNewCounsellingRecord"><i class="ion ion-ios-circle-outline"></i> 我的预约</a>
+                    <a v-if="loginUser.role.roleName === '咨询师' " href="/getCounselorNewCounsellingRecord"><i class="ion ion-ios-circle-outline"></i> 我的预约</a>
+                </li>
+
+                <li class="menu-header">测试</li>
+                <li><a href="/getNewTestRecord"><i class="ion ion-ios-circle-outline"></i> 测试任务</a></li>
+                <li><a href="/getAllTestRecord"><i class="ion ion-ios-circle-outline"></i> 我的测试记录</a></li>
+
+                <li class="menu-header" v-if="loginUser.role.roleName === '超级管理员' ">申请</li>
+                <li v-if="loginUser.role.roleName === '超级管理员' ">
+                    <a href="applyRecord.html"><i class="ion ion-ios-circle-outline"></i> 申请</a>
+                </li>
+
+                <li class="menu-header" v-if="loginUser.role.roleName ===  '咨询师' ">测评</li>
+                <li v-if="loginUser.role.roleName === '咨询师' ">
+                    <a href="/self/posttask"><i class="ion ion-ios-circle-outline"></i> 发布测评任务</a>
+                </li>
+                <li v-if="loginUser.role.roleName ===  '咨询师' ">
+                    <a href="testrecord.html"><i class="ion ion-ios-circle-outline"></i> 测评管理</a>
+                </li>
+
+                <li class="menu-header" v-if="loginUser.role.roleName === '管理员' || loginUser.role.roleName ===  '咨询师'">信息管理</li>
+                <li v-if="loginUser.role.roleName === '管理员' || loginUser.role.roleName ===  '咨询师'">
+                    <a href="exammanagement.html"><i class="ion ion-ios-circle-outline"></i> 试题管理</a>
+                </li>
+                <li v-if="loginUser.role.roleName === '管理员' ">
+                    <a href="groupmanagement.html"><i class="ion ion-ios-circle-outline"></i> 团体管理 </a>
+                </li>
+                <li v-if="loginUser.role.roleName === '管理员' ">
+                    <a href="usermanagement.html"><i class="ion ion-ios-circle-outline"></i> 用户管理 </a>
+                </li>
+                <li v-if="loginUser.role.roleName === '咨询师' ">
+                    <a href="userRecord.html"><i class="ion ion-ios-circle-outline"></i> 用户记录 </a>
+                </li>
+
+                <!--			<li>-->
+                <!--			  <a href="reservation.html"><i class="ion ion-clipboard"></i><span>我的预约</span></a>-->
+                <!--			</li>-->
+            </ul>
+        </aside>
+      </div>
+      <div class="main-content">
+        <section class="section">
+          <h1 class="section-header">
+            <div>试题管理</div>
+          </h1>
+			<!-- 所有试题查看 -->
+            <div class="row mt-4">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="float-right">
+                        <div class="input-group">
+                            <label class="form-inline">
+                                <input type="text" class="form-control" placeholder="可输入试题id" v-model="paperId">
+                                <input type="text" class="form-control" placeholder="可输入类型名" v-model="typeName">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-secondary" v-on:click="getPaper()"><i class="ion ion-search"></i></button>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <h4>试卷库</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped topics">
+                        <tr>
+                          <th class="text-center">
+                            <div class="custom-checkbox custom-control">
+                              <input type="checkbox" class="custom-control-input" id="checkbox-al">
+                              <label for="checkbox-al" class="custom-control-label"></label>
+                            </div>
+                          </th>
+                        <th>ID</th>
+                        <th>名字</th>
+                        <th>类型</th>
+                        <th>描述</th>
+                        <th>操作</th>
+                        </tr>
+                          <tr v-cloak v-for="paper in papers">
+                              <td width="40">
+                                  <div class="custom-checkbox custom-control">
+                                      <input type="checkbox" class="custom-control-input" :id="'checkbox-p' + paper.id " :value="paper.id" v-model="checkPapers">
+                                      <label :for="'checkbox-p' + paper.id" class="custom-control-label"></label>
+                                  </div>
+                              </td>
+                              <td>{{ paper.id }}</td>
+                              <td>{{ paper.paperName }}</td>
+                              <td>{{ paper.type.typeName }}</td>
+                              <td>{{ paper.description }}</td>
+                              <td>
+                                  <a class="btn btn-action btn-secondary" v-on:click="getTopic(1, paper.id)">查看所有题目</a>
+                                  <a class="btn btn-action btn-secondary">导出试题</a>
+                                  <button class="layui-btn layui-btn-normal addTopic" :paperId="paper.id" data-method="offset" data-type="auto">导入试题</button>
+                              </td>
+                          </tr>
+                      </table>
+                    </div>
+                  </div>
+                    <div class="card-footer text-right">
+                        <nav v-cloak>
+                            <p>当前 <span>{{ paperPageNum }}</span> 页,总 <span>{{ paperPages }}</span> 页,共 <span>{{ paperTotal }}</span> 条记录</p>
+                        </nav>
+                        <nav class="d-inline-block">
+                            <ul class="pagination mb-0">
+                                <li class="page-item">
+                                    <a class="page-link" v-on:click="getPaper()">首页 </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" v-on:click="getPaper(paperHasPreviousPage ? paperPrePage : 1)">上一页</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" v-on:click="getPaper(paperHasNextPage ? paperNextPage : paperPages)">下一页</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" v-on:click="getPaper(paperPages)">尾页</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+              </div>
+            </div>
+			
+<!--			试题中的详细题目-->
+			<div class="row mt-5">
+			  <div class="col-12">
+			    <div class="card">
+			      <div class="card-header">
+			        <div class="float-right">
+                        <div class="input-group">
+                            <label class="form-inline">
+                                <input type="text" class="form-control" placeholder="可输入题目id" v-model="topicId">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-secondary" v-on:click="getPaper()"><i class="ion ion-search"></i></button>
+                                </div>
+                            </label>
+                        </div>
+			        </div>
+			        <h4>包含的试题</h4>
+                  </div>
+			      <div class="card-body">
+			        <div class="table-responsive">
+			          <table class="table table-striped">
+			            <tr>
+			              <th>试题ID</th>
+			              <th>题目内容</th>
+			              <th>备注</th>
+			              <th>选项</th>
+                          <th>分数</th>
+			            </tr>
+			            <tr v-cloak v-for="topic in topics">
+                            <td>{{ topic.id }}</td>
+                            <td>{{ topic.testQuestion }}</td>
+                            <td>{{ topic.description }}</td>
+                            <td>
+                              <p v-for="option in topic.optionsList">
+                                {{ option.options }}
+                              </p>
+                            </td>
+                            <td>
+                              <p v-for="option in topic.optionsList">
+                                {{ option.score }}
+                              </p>
+                            </td>
+			            </tr>
+			          </table>
+			        </div>
+			      </div>
+                  <div class="card-footer text-right">
+                    <nav v-cloak v-if="topicPageInfo != null">
+                      <p>当前 <span>{{ topicPageInfo.pageNum }}</span> 页,总 <span>{{ topicPageInfo.pages }}</span> 页,共 <span>{{ topicPageInfo.total }}</span> 条记录</p>
+                    </nav>
+                    <nav class="d-inline-block">
+                      <ul class="pagination mb-0">
+                        <li class="page-item">
+                          <a class="page-link" v-on:click="getTopic()">首页 </a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link" v-on:click="getTopic(topicPageInfo.hasPreviousPage ? topicPageInfo.prePage : 1)">上一页</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link" v-on:click="getTopic(topicPageInfo.hasNextPage ? topicPageInfo.nextPage : topicPageInfo.pages)">下一页</a>
+                        </li>
+                        <li class="page-item">
+                          <a class="page-link" v-on:click="getTopic(topicPageInfo.pages)">尾页</a>
+                        </li>
+                      </ul>
+                    </nav>
+                  </div>
+			    </div>
+			  </div>
+			</div>
+			
+        </section>
+      </div>
+      <footer class="main-footer">
+        <div class="footer-left">
+        Copyright &copy; 2020 <div class="bullet"></div> Orchid
+		</div>
+        <div class="footer-right"></div>
+      </footer>
+    </div>
+  </div>
+
+  <div id="upLoadFile" style="display: none;">
+    <p>提交得文件第一列为问题，第二列为描述</p>
+    <form method="post" id="fileForm" action="" enctype="multipart/form-data">
+      <input type="file" name="file">
+    </form>
+  </div>
+
+  <script src="../dist/modules/jquery.min.js"></script>
+  <script src="../dist/modules/popper.js"></script>
+  <script src="../dist/modules/tooltip.js"></script>
+  <script src="../dist/modules/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../dist/modules/nicescroll/jquery.nicescroll.min.js"></script>
+  <script src="../dist/modules/scroll-up-bar/dist/scroll-up-bar.min.js"></script>
+  <script src="../dist/js/sa-functions.js"></script>
+  <script src="../plugin/layui/layui.js"></script>
+  <script src="../plugin/jquery.form.js"></script>
+
+  <script src="../dist/js/scripts.js"></script>
+  <script src="../dist/js/custom.js"></script>
+  <script src="../dist/js/demo.js"></script>
+
+  <script src="../js/vue.js" type="text/javascript"></script>
+  <script src="../js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="../js/task.js"></script>
+<!--  <script src="../js/self_my.js"></script>-->
+
+  <script>
+    layui.use(['layer', 'form'], function(){ //独立版的layer无需执行这一句
+      var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+      var form = layui.form;
+
+      //触发事件
+      var active = {
+        setTop: function(){
+          var that = this;
+          //多窗口模式，层叠置顶
+        }
+        ,offset: function(othis){
+          var type = othis.data('type')
+                  ,text = othis.text();
+
+          layer.open({
+            type: 1
+            ,offset: type
+            ,id: 'layerDemo'+type //防止重复弹出
+            ,content: $("#upLoadFile")
+            ,btn: ['确定','取消']
+            ,btnAlign: 'c' //按钮居中
+            ,shade: 0 //不显示遮罩
+            ,yes: function(){
+
+              $("#fileForm").ajaxSubmit({
+                success:function (data) {
+                  if (data.code == 200){
+                    alert("导入成功！");
+                  }else{
+                    alert(data.msg);
+                  }
+                  layer.closeAll();
+                }
+              });
+            }
+            ,btn2: function () {
+              layer.closeAll();
+            }
+          });
+        }
+      };
+
+      $('body').on('click', '.addTopic', function(){
+        var othis = $(this), method = othis.data('method');
+        active[method] ? active[method].call(this, othis) : '';
+
+        //获取paperId
+        var url = "/batchTopic?paperId=" + $(this).attr("paperId");
+
+        $("#fileForm").attr('action', url);
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>

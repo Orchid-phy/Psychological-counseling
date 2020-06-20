@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:v-on="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>about</title>
+    <!--meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <script>
+      addEventListener("load", function () {
+      	setTimeout(hideURLbar, 0);
+      }, false);
+      
+      function hideURLbar() {
+      	window.scrollTo(0, 1);
+      }
+    </script>
+    <!--//meta tags ends here-->
+    <!--booststrap-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all">
+    <!--//booststrap end-->
+    <!-- font-awesome icons -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <!-- //font-awesome icons -->
+    <!--stylesheets-->
+    <link href="/css/style-home.css" rel='stylesheet' type='text/css' media="all">
+    <!--//stylesheets-->
+   <!-- Web-Fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Poiret+One&amp;subset=cyrillic,latin-ext" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Mada:200,300,400,500,600,700,900&amp;subset=arabic" rel="stylesheet">
+	<!-- //Web-Fonts -->
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../plugin/layui/css/layui.css"  media="all">
+
+    <link rel="stylesheet" href="../css/message.css">
+
+  </head>
+  <body>
+
+  <!--  聊天弹框-->
+  <div id="messageLayer" style="display: none;">
+      <div id="message" class="messageDiv">
+      </div>
+
+      <div class="footer">
+          <input class="contentInput" type="textera" placeholder="点击输入" id="contentText">
+      </div>
+
+  </div>
+
+
+  <div id="myHome">
+    <!--headder-->
+    <div class="header-outs inner_page-banner " id="home">
+      <div class="headder-top">
+        <!-- nav -->
+        <nav>
+          <div id="logo">
+            <h1><a href="/home">Counselling</a></h1>
+          </div>
+          <label for="drop" class="toggle">Menu</label>
+          <input type="checkbox" id="drop">
+            <ul class="menu mt-2">
+                <li class="active"><a href="/home">首页</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="/home/about">测评</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="/home/counselling">咨询</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="../confide/index.html">树洞</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1" id="chatLi" style="display: none;">
+
+                    <!--                    <a href="/home/message">我的消息</a>-->
+<!--                    <button :userId="loginUser.userId" :toUserId="user.userId" class="layui-btn layui-btn-normal chat" data-type="auto" data-method="offset">聊天</button>-->
+                </li>
+                <li>
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        我
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/self/index">个人中心</a>
+                        <a class="dropdown-item" href="/user/login_page">登录</a>
+                        <a class="dropdown-item" href="/logout">退出登录</a>
+                    </div>
+                </li>
+                <!--                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="/home/contact">联系我们</a></li>-->
+            </ul>
+        </nav>
+        <!-- //nav -->
+      </div>
+    </div>
+    <!--//headder-->
+    <!-- short -->
+    <div class="using-border py-3">
+      <div class="inner_breadcrumb  ml-4">
+        <ul class="short_ls">
+          <li>
+            <a href="/home">Home</a>
+            <span>/ /</span>
+          </li>
+          <li>About</li>
+        </ul>
+      </div>
+    </div>
+
+    <!--//stats -->
+	<section class="blog_w3ls py-3" id="why" v-if="isRouterAlive">
+		<div class="container py-xl-5" style="border-top: 1px solid #bdbdbd;">
+			<h3 class="title mb-lg-3 mb-md-3 mb-sm-3 mb-2">心理咨询师</h3>
+			<div class="row">
+				<div class="col-lg-4 col-md-4" v-cloak v-for="user in counselorList">
+					<div class="card border-0 med-blog m-2">
+                        <a :href=" '#?userId=' + user.userId ">
+                            <div class="card-body border" >
+                                <img class="card-img-bottom" style="width: 100px; height: 100px;" :src=" '../updateFile/img/avatar/' + user.img " alt="图片加载失败">
+                                <div class="mb-3">
+                                    <h5 class="blog-title card-title m-0">{{ user.username }}
+                                    </h5>
+                                    <div class="blog_w3icon">
+                                        <span>性别：{{ user.sex }}</span>
+                                    </div>
+                                </div>
+                                <p style="font-size: 14px;margin: 0px;color: #000;">联系方式：{{ user.phone }}</p>
+                                <p style="font-size: 14px;margin: 0px;color: #000;" v-if="user.email != null">邮箱：{{ user.email }}</p>
+                                <p style="font-size: 14px;margin: 0px;color: #000;" v-if="user.email == null">邮箱：未知</p>
+                                <div v-if="loginUser.userId != null">
+<!--                                    <a href="#">聊天</a>-->
+                                    <a :userId="loginUser.userId" :toUserId="user.userId" class="chat" data-type="auto" data-method="offset">聊天</a>
+
+                                    <a class="reservation">预约</a>
+                                    <div style="display: none;">
+                                        <input type="date" placeholder="点击输入日期" v-model="reservationDate">
+                                        <input type="time" placeholder="点击输入时间" v-model="reservationTime">
+                                        <button v-on:click="postReservation(user.userId)">确认</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+					</div>
+				</div>
+			</div>
+
+            <div class="row mt-2" v-if="!isAll">
+                <div class="col-12">
+                    <button type="button" class="col-12 btn text-center" v-on:click="getAllCounselor()">更多咨询师</button>
+                </div>
+            </div>
+		</div>
+
+        <div class="card-footer text-right mt-3" style="background-color: #fff;" v-if="isAll">
+            <nav v-cloak v-if="counselorPageInfo != null">
+                <p>当前 <span>{{ counselorPageInfo.pageNum }}</span> 页,总 <span>{{ counselorPageInfo.pages }}</span> 页,共 <span>{{ counselorPageInfo.total }}</span> 条记录</p>
+            </nav>
+            <nav class="d-inline-block">
+                <ul class="pagination mb-0">
+                    <li class="page-item">
+                        <a class="page-link" v-on:click="getAllCounselor()">首页 </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" v-on:click="getAllCounselor(counselorPageInfo.hasPreviousPage ? counselorPageInfo.prePage : 1)">上一页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" v-on:click="getAllCounselor(counselorPageInfo.hasNextPage ? counselorPageInfo.nextPage : counselorPageInfo.pages)">下一页</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" v-on:click="getAllCounselor(counselorPageInfo.pages)">尾页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+	</section>
+    <!-- footer -->
+    <footer class="py-lg-4 py-md-3 py-sm-3 py-3">
+      <div class="container py-lg-5 py-md-5 py-sm-4 py-3">
+        <div class="footer-w3layouts-head text-center">
+          <h2><a href="home.html">Mulching</a></h2>
+        </div>
+        <div class="social-icons mt-lg-5 mt-md-4 mt-3 text-center">
+          <ul>
+            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+            <li><a href="#"><span class="fa fa-rss"></span></a></li>
+            <li><a href="#"><span class="fa fa-envelope"></span></a></li>
+            <li><a href="#"><span class="fa fa-instagram"></span></a></li>
+          </ul>
+        </div>
+        <!-- move icon -->
+        <div class="text-center">
+          <a href="#home" class="move-top text-center mt-3"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
+        <!--//move icon -->
+      </div>
+    </footer>
+    <!--//footer -->
+  </div>
+
+  </body>
+</html>
+
+
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="../js/vue.js" type="text/javascript"></script>
+<script src="../js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../plugin/layui/layui.js" charset="utf-8"></script>
+
+<script src="../js/counselling.js"></script>
+<script src="../js/message.js"></script>
+
+<script>
+
+    //发送人的id
+    var userId = "0";
+    //接受者的id
+    var toUserId = "0";
+    //发送消息
+    flag = "success";
+
+    $(function () {
+
+        //点击预约按钮
+        $("body").on("click", ".reservation", function () {
+
+            if ($(this).next().css("display") === "none"){
+                $(this).next().css("display", "");
+            }else {
+                $(this).next().css("display", "none");
+            }
+
+        });
+
+        //消息滚动条，自动在底部，看到最新的消息
+        $('.messageDiv')[0].scrollTop =$('.messageDiv')[0].scrollHeight;
+
+    });
+
+    layui.use('layer', function(){ //独立版的layer无需执行这一句
+        var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+
+        //触发事件
+        var active = {
+            offset: function(othis){
+                var type = othis.data('type')
+                    ,text = othis.text();
+
+                layer.open({
+                    type: 1
+                    ,offset: type
+                    ,id: 'layerDemo'+type
+                    ,content: $("#messageLayer")
+                    ,btn: ['发送', '关闭']
+                    ,btnAlign: 'c' //按钮居中
+                    ,shade: 0 //不显示遮罩
+                    ,yes: function(){
+                        sendMessage();
+                    }
+                    ,btn2 : function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        };
+
+        $('body').on('click', '.chat', function(){
+
+            //发送者id
+            userId = $(this).attr("userId");
+
+            //接收者id
+            toUserId = $(this).attr("toUserId");
+
+            //打开socket， 如果不支持socket则提示消息
+            openSocket();
+
+            if (flag === "success"){
+                var othis = $(this), method = othis.data('method');
+                active[method] ? active[method].call(this, othis) : '';
+            }
+
+        });
+
+    });
+
+    var socket;
+    function openSocket() {
+        if(typeof(WebSocket) == "undefined") {
+            alert("您的浏览器不支持WebSocket,请使用高版本的浏览器哦！");
+            flag = "error";
+        }else{
+            //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+            //var socketUrl="${request.contextPath}/im/"+$("#userId").val();
+            var socketUrl="http://localhost:8080/imserver/" + userId;
+            socketUrl=socketUrl.replace("https","ws").replace("http","ws");
+            // console.log(socketUrl);
+            if(socket!=null){
+                socket.close();
+                socket=null;
+            }
+            socket = new WebSocket(socketUrl);
+            //打开事件
+            socket.onopen = function() {
+                // console.log("websocket已打开");
+                // socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            socket.onmessage = function(msg) {
+               if(msg != null) {
+                   //发现消息进入    开始处理前端触发逻辑
+                   message = $.parseJSON(msg.data);
+                   //将消息显示
+
+                   var myDate = new Date();
+
+                   var html = "<table>\n" +
+                       "                <tr>\n" +
+                       "                    <td style=\"font-size: 12px; text-align: right;\">" + myDate.toLocaleString( ) + "</td>\n" +
+                       "                    <td rowspan=\"2\" style=\"width: 32px;\">\n" +
+                       "                        <img style=\"width: 30px; height: 30px;\" src=\"../updateFile/img/avatar/baibai.jpg\">\n" +
+                       "                    </td>\n" +
+                       "                </tr>\n" +
+                       "                <tr>\n" +
+                       "                    <td style=\"text-align: right;\">" + message.contentText + "</td>\n" +
+                       "                </tr>\n" +
+                       "            </table>"
+
+                   //将消息显示
+                   $("#message").append(html);
+
+               }
+            };
+            // //关闭事件
+            // socket.onclose = function() {
+            //     console.log("websocket已关闭");
+            // };
+            //发生了错误事件
+            socket.onerror = function() {
+                console.log("websocket发生了错误");
+            }
+        }
+    }
+    function sendMessage() {
+        if(typeof(WebSocket) == "undefined") {
+            alert("您的浏览器不支持WebSocket");
+        }else {
+            socket.send('{"toUserId":"'+ toUserId +'","contentText":"'+$("#contentText").val()+'"}');
+
+            var myDate = new Date();
+
+            var html = "<table>\n" +
+                "                <tr>\n" +
+                "                    <td rowspan=\"2\"style=\"width: 32px;\">\n" +
+                "                        <img style=\"width: 30px; height: 30px;\" src=\"../updateFile/img/avatar/baibai.jpg\">\n" +
+                "                    </td>\n" +
+                "                    <td style=\"font-size: 12px;\">" + myDate.toLocaleString( ) + "</td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                    <td>" + $("#contentText").val() + "</td>\n" +
+                "                </tr>\n" +
+                "            </table>";
+
+            $("#message").append(html);
+
+            $(".contentInput").val("");
+
+        }
+    }
+
+</script>

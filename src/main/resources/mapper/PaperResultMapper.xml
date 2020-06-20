@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.PaperResultMapper">
+
+<!--    根据试题id查询试题结果信息-->
+    <select id="selectResultByPaperId" parameterType="int" resultType="PaperResult">
+        SELECT score_interval, result FROM paper_results WHERE paper_id = #{paperId}
+    </select>
+
+</mapper>
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.GroupPaperMapper">
+
+<!--    添加测试任务信息-->
+    <insert id="inTask" parameterType="ParaVo">
+        insert into group_paper values
+        <foreach collection="list" index="index1" item="group" separator=",">
+            <foreach collection="list2" index="index2" item="paper" separator=",">
+                (null ,#{group}, #{paper}, now(), #{para})
+            </foreach>
+        </foreach>
+    </insert>
+
+    <resultMap id="selectByAdminNameMap" type="GroupPaper">
+        <id property="id" column="gid"></id>
+        <result property="createTime" column="create_time"></result>
+        <result property="stopTime" column="stop_time"></result>
+        <association property="groupMy" javaType="GroupMy">
+            <id property="groupId" column="group_id"></id>
+            <result property="groupName" column="group_name"></result>
+        </association>
+        <association property="paper" javaType="Paper">
+            <id property="id" column="pid"></id>
+            <result property="paperName" column="paper_name"></result>
+        </association>
+    </resultMap>
+    
+<!--    根据管理员用户名查询发布的任务-->
+    <select id="selectByAdminName" parameterType="ParaVo" resultMap="selectByAdminNameMap">
+        SELECT g.id as gid, gm.group_id, gm.group_name, p.id as pid, p.paper_name, create_time, stop_time from group_paper g join group_my gm join paper p
+        on g.group_id = gm.group_id
+        and g.paper_id = p.id
+        <where>
+<!--            <if test="para != null">-->
+<!--                and gm.administrator_id = (SELECT user_id from user where username = #{para})-->
+<!--            </if>-->
+            <if test="groupPaper.groupMy.groupId != null and groupPaper.groupMy.groupId != ''">
+                and gm.group_id = #{groupPaper.groupMy.groupId}
+            </if>
+            <if test="groupPaper.paper.id != null and groupPaper.paper.id != ''">
+                and p.id = #{groupPaper.paper.id}
+            </if>
+        </where>
+        ORDER BY create_time desc
+    </select>
+
+</mapper>
+

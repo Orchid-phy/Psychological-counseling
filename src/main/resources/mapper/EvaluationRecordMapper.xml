@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.EvaluationRecordMapper">
+
+<!--    查询所有当前用户的测试记录-->
+    <select id="selectAllTestByUsername" parameterType="ParaVo" resultType="EvaluationRecord">
+        SELECT er.id, er.release_date, score from evaluation_record er join user u
+        on er.user_id = u.user_id
+        and username = #{para}
+        <where>
+            <if test="para1 != null ">
+                and DATE(release_date) = DATE(#{para1})
+            </if>
+        </where>
+        ORDER BY release_date
+    </select>
+
+    <resultMap id="selectEvaRecordByUsernameMap" type="evaluationRecord">
+        <id property="id" column="id"></id>
+        <result property="score" column="score"></result>
+        <result property="releaseDate" column="release_date"></result>
+        <result property="stopDate" column="stop_date"></result>
+        <association property="releaseUser" javaType="User">
+            <result property="username" column="releaseUsername"></result>
+        </association>
+        <association property="paper" javaType="Paper">
+            <result property="paperName" column="paper_name"></result>
+        </association>
+        <association property="user" javaType="User">
+            <result property="username" column="username"></result>
+        </association>
+
+    </resultMap>
+
+<!--    根据用户名查询测试记录-->
+    <select id="selectEvaRecordByUsername" parameterType="String" resultMap="selectEvaRecordByUsernameMap">
+        SELECT  ev.id, u.username, p.paper_name, ev.score, ev.release_date, ev.stop_date,
+        (SELECT username FROM user WHERE user_id = ev.release_user_id) as releaseUsername
+        FROM evaluation_record ev join user u join paper p
+        on ev.user_id = u.user_id and ev.paper_id = p.id
+        and u.username like #{username}
+        ORDER BY ev.release_date desc
+    </select>
+
+    <resultMap id="selTestReByNameMap" type="EvaluationRecord">
+        <id property="id" column="id"></id>
+        <result property="stopDate" column="stop_date"></result>
+        <association property="paper" javaType="Paper">
+            <id property="id" column="paper_id"></id>
+        </association>
+    </resultMap>
+
+<!--    查询用户未来时间的测试任务-->
+    <select id="selTestReByName" parameterType="String" resultMap="selTestReByNameMap">
+        SELECT er.id, er.stop_date, paper_id from evaluation_record er join user u
+        on er.user_id = u.user_id
+        and username = #{username}
+        and stop_date > NOW()
+        ORDER BY stop_date
+    </select>
+
+<!--管理员发布任务-->
+    <insert id="insertEvaluation" parameterType="ParaVo">
+        insert into evaluation_record(user_id, paper_id, release_date, stop_date, release_user_id)
+        VALUES
+        <foreach collection="list" index="index1" item="group" separator=",">
+            <foreach collection="list2" index="index2" item="paper" separator=",">
+                (#{group}, #{paper}, now(), #{evaluationRecord.stopDate}, #{evaluationRecord.releaseUser.userId} )
+            </foreach>
+        </foreach>
+    </insert>
+
+<!--    记录测试结果-->
+    <update id="upScore" parameterType="EvaluationRecord">
+        UPDATE evaluation_record SET score = #{score} WHERE id = #{id};
+    </update>
+
+</mapper>
+

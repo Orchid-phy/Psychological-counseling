@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.GroupMyMapper">
+
+<!--    查询咨询师同一个团队的所有团体-->
+    <select id="selAllGroupByCounselor" parameterType="ParaVo" resultType="GroupMy">
+        SELECT DISTINCT g.group_id, g.group_name, g.description, affiliation FROM group_my g join group_user gu
+        on gu.group_id = g.group_id and gu.group_id in
+        ( SELECT group_id FROM group_user WHERE user_id = #{para} )
+        <where>
+            <if test="groupMy.groupId != null">
+                and group_id = #{groupMy.groupId}
+            </if>
+            <if test="groupMy.groupName != null">
+                and group_name like #{groupMy.groupName}
+            </if>
+        </where>
+    </select>
+
+    <!--    查询该管理员创建的所有团体-->
+    <select id="selAllGroupByAdmin" parameterType="GroupMy" resultType="GroupMy">
+        SELECT g.group_id, g.group_name, g.description, affiliation FROM group_my g join user u
+        on g.administrator_id = u.user_id
+        <where>
+            <if test="administrator.username != null">
+                and u.username = #{administrator.username}
+            </if>
+            <if test="groupId != null">
+                and g.group_id = #{groupId}
+            </if>
+            <if test="groupName != null">
+                and g.group_name like #{groupName}
+            </if>
+        </where>
+    </select>
+
+<!--    根据id删除团体-->
+    <delete id="delById" parameterType="int">
+        DELETE from group_my WHERE group_id = #{id}
+    </delete>
+
+    <insert id="insertGroup" parameterType="GroupMy">
+        INSERT into group_my
+        VALUES(null
+        , #{groupName}
+        ,(SELECT user_id from user where username = #{administrator.username})
+        ,#{description}
+        ,#{affiliation})
+    </insert>
+
+</mapper>
+

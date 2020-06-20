@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.TopicTypeMapper">
+
+    <select id="selectAllType" resultType="TopicType">
+        SELECT id,type_name from topic_type
+    </select>
+
+</mapper>
+

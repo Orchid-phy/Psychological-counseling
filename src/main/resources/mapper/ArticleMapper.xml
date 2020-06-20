@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.ArticleMapper">
+    
+    <resultMap id="selArticleByUsernameMap" type="Article">
+        <id column="id" property="id"></id>
+        <result column="content" property="content"></result>
+        <result column="create_time" property="createTime"></result>
+        <association property="author" javaType="User">
+            <id column="author_id" property="userId"></id>
+            <result column="username" property="username"></result>
+            <result column="img" property="img"></result>
+        </association>
+    </resultMap>
+
+<!--    查询文章信息，可以根据发表用户的用户名查询-->
+    <select id="selArticleByUsername" parameterType="String" resultMap="selArticleByUsernameMap">
+        SELECT id,content,a.create_time,author_id,u.username, u.img FROM
+        article a join user u
+        on a.author_id = u.user_id
+        <where>
+            <if test="username != null">
+                and u.username like #{authorName}
+            </if>
+        </where>
+        ORDER BY create_time desc
+    </select>
+
+<!--    咨询师添加文章信息-->
+    <insert id="insertArticle" parameterType="Article">
+        INSERT INTO article(id, title, content, create_time, author_id, img)
+        VALUES(null, #{title}, #{content}, now(),
+        (SELECT user_id FROM user WHERE username = #{author.username}),
+        #{img})
+    </insert>
+
+</mapper>
+

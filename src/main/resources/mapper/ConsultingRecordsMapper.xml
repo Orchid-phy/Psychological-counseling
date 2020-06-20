@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.ConsultingRecordsMapper">
+
+    <resultMap id="selectAllInfoByUsernameMap" type="ConsultingRecords">
+        <id property="id" column="id"></id>
+        <result property="createTime" column="create_time"></result>
+        <result property="time" column="time"></result>
+        <result property="isAgree" column="is_agree"></result>
+        <result property="description" column="description"></result>
+        <association property="counselor" javaType="User">
+            <id property="username" column="username"></id>
+        </association>
+    </resultMap>
+
+<!--    查询所有当前用户的咨询记录-->
+    <select id="selectAllInfoByUsername" parameterType="ParaVo" resultMap="selectAllInfoByUsernameMap">
+        SELECT cr.id,username, cr.create_time, cr.time, is_agree, description
+        from consulting_records cr join user u
+        on cr.counselor_id = u.user_id
+        and cr.user_id = (SELECT user_id from user WHERE username = #{para})
+        <where>
+            <if test="para1 != null ">
+                and cr.counselor_id in (SELECT user_id from user WHERE username = #{para1})
+            </if>
+        </where>
+        ORDER BY cr.create_time desc
+    </select>
+
+    <resultMap id="selConsultingReByNameMap" type="ConsultingRecords">
+        <id property="id" column="id"></id>
+        <result property="time" column="time"></result>
+        <result property="isAgree" column="is_agree"></result>
+        <association property="counselor" javaType="User">
+            <result property="username" column="username"></result>
+        </association>
+    </resultMap>
+
+<!--    查询用户未来时间的咨询预约-->
+    <select id="selConsultingReByName" parameterType="String" resultMap="selConsultingReByNameMap">
+        SELECT cr.id, username, cr.time, is_agree
+        from consulting_records cr join user u
+        on cr.counselor_id = u.user_id
+        and cr.user_id = (SELECT user_id from user WHERE username = #{username})
+        and cr.time > now()
+        ORDER BY cr.time
+    </select>
+
+    <!--    查询咨询师未来时间的咨询预约-->
+    <select id="selCounselorConsultingReByName" parameterType="String" resultMap="selConsultingReByNameMap">
+        SELECT cr.id, username, cr.time, is_agree
+        from consulting_records cr join user u
+        on cr.counselor_id = u.user_id
+        and cr.counselor_id = (SELECT user_id from user WHERE username = #{username})
+        and cr.time > now()
+        ORDER BY cr.time
+    </select>
+
+    <resultMap id="selConsultingRecordByUserIdMap" type="consultingRecords">
+        <id property="id" column="id"></id>
+        <result property="time" column="time"></result>
+        <result property="acceptanceTime" column="acceptance_time"></result>
+        <result property="level" column="level"></result>
+        <result property="description" column="description"></result>
+        <result property="isAgree" column="is_agree"></result>
+        <association property="user" javaType="User">
+            <result property="username" column="username"></result>
+        </association>
+        <association property="counselor" javaType="User">
+            <result property="username" column="counselorName"></result>
+        </association>
+    </resultMap>
+    
+<!--    根据用户id查询用户的详细咨询记录-->
+    <select id="selConsultingRecordByUserId" parameterType="String" resultMap="selConsultingRecordByUserIdMap">
+        SELECT c.id, (SELECT username FROM user WHERE user_id = c.user_id) as username,
+        c.time, c.acceptance_time, c.level, c.description,
+        c.is_agree, u.username as counselorName FROM consulting_records c JOIN user u
+        on u.user_id = c.counselor_id
+        and c.user_id in (SELECT user_id FROM user WHERE username like #{username}) ORDER BY c.time desc
+    </select>
+
+<!--    取消预约-->
+    <delete id="delRecord" parameterType="int">
+        DELETE from consulting_records WHERE id = #{id};
+    </delete>
+
+<!--    添加预约，用户点击预约-->
+    <insert id="insertRecord" parameterType="ConsultingRecords">
+        INSERT INTO consulting_records(user_id, counselor_id, time, create_time)
+        VALUES(
+        (SELECT user_id FROM user WHERE username = #{user.username}),
+        #{counselor.userId}, #{time}, now())
+    </insert>
+
+</mapper>
+

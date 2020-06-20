@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.PaperMapper">
+
+    <resultMap id="selAllPaperByIdOrTypeMap" type="Paper">
+        <id property="id" column="id"></id>
+        <result property="paperName" column="paper_name"></result>
+        <result property="description" column="description"></result>
+        <association property="type" javaType="TopicType">
+            <result property="typeName" column="type_name"></result>
+        </association>
+    </resultMap>
+
+<!--    查询所有试题-->
+    <select id="selAllPaperByIdOrType" parameterType="Paper" resultMap="selAllPaperByIdOrTypeMap">
+        SELECT p.*, tt.type_name from paper p join topic_type tt
+        on p.type = tt.id
+        <where>
+            <if test="id != null">
+                and p.id = #{id}
+            </if>
+            <if test="type.typeName != null">
+                and type_name like #{type.typeName};
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="selPaperTopMap" type="Paper">
+        <id property="id" column="id"></id>
+        <result property="paperName" column="paper_name"></result>
+        <result property="description" column="description"></result>
+        <result property="numbers" column="numbers"></result>
+        <result property="img" column="img"></result>
+        <association property="type" javaType="TopicType">
+            <result property="typeName" column="type_name"></result>
+        </association>
+    </resultMap>
+
+<!--    查询测评人数最多的前三个测试-->
+    <select id="selPaperTop" resultMap="selPaperTopMap">
+        SELECT p.*, t.type_name, count(p.id) as numbers from paper p join evaluation_record e join topic_type t
+        on p.id = e.paper_id
+        and p.type = t.id
+        GROUP BY p.id
+        ORDER BY count(p.id) desc
+        limit 0, 3
+    </select>
+
+    <resultMap id="selPaperByTypeMap" type="Paper">
+        <id property="id" column="id"></id>
+        <result property="paperName" column="paper_name"></result>
+        <result property="description" column="description"></result>
+        <result property="img" column="img"></result>
+    </resultMap>
+
+<!--    根据类型查询试题信息-->
+    <select id="selPaperByType" parameterType="String" resultMap="selPaperByTypeMap">
+        SELECT p.* from paper p join topic_type tt
+        on p.type = tt.id
+        <where>
+            <if test="typeName != null">
+                and tt.type_name = #{typeName}
+            </if>
+        </where>
+    </select>
+
+<!--    根据试题id查询试题详细信息-->
+    <select id="selPaperById" parameterType="int" resultType="Paper">
+        select * from paper where id = #{id}
+    </select>
+
+</mapper>
+

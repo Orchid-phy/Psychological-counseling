@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zxx" xmlns:v-on="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>about</title>
+    <!--meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <script>
+      addEventListener("load", function () {
+      	setTimeout(hideURLbar, 0);
+      }, false);
+      
+      function hideURLbar() {
+      	window.scrollTo(0, 1);
+      }
+    </script>
+    <!--//meta tags ends here-->
+    <!--booststrap-->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all">
+    <!--//booststrap end-->
+    <!-- font-awesome icons -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+    <!-- //font-awesome icons -->
+    <!--stylesheets-->
+    <link href="/css/style-home.css" rel='stylesheet' type='text/css' media="all">
+    <!--//stylesheets-->
+   <!-- Web-Fonts -->
+	<link href="http://fonts.googleapis.com/css?family=Poiret+One&amp;subset=cyrillic,latin-ext" rel="stylesheet">
+	<link href="http://fonts.googleapis.com/css?family=Mada:200,300,400,500,600,700,900&amp;subset=arabic" rel="stylesheet">
+	<!-- //Web-Fonts -->
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+      <link rel="stylesheet" href="../plugin/layui/css/layui.css"  media="all">
+
+      <link rel="stylesheet" href="../css/message.css">
+
+  </head>
+  <body>
+
+  <!--  聊天弹框-->
+  <div id="messageLayer" style="display: none;">
+      <div id="message" class="messageDiv">
+          <table>
+              <tr>
+                  <td rowspan="2"style="width: 32px;">
+                      <img style="width: 30px; height: 30px;" src="../updateFile/img/avatar/baibai.jpg">
+                  </td>
+                  <td style="font-size: 12px;">2020-05-27 17:46:45</td>
+              </tr>
+              <tr>
+                  <td>你好呀!</td>
+              </tr>
+          </table>
+          <table>
+              <tr>
+                  <td style="font-size: 12px; text-align: right;">2020-05-27 17:46:45</td>
+                  <td rowspan="2" style="width: 32px;">
+                      <img style="width: 30px; height: 30px;" src="../updateFile/img/avatar/baibai.jpg">
+                  </td>
+              </tr>
+              <tr>
+                  <td style="text-align: right;">你好呀!</td>
+              </tr>
+          </table>
+
+      </div>
+  </div>
+
+  <div id="myHome">
+    <!--headder-->
+    <div class="header-outs inner_page-banner " id="home">
+      <div class="headder-top">
+        <!-- nav -->
+        <nav>
+          <div id="logo">
+            <h1><a href="/home">Counselling</a></h1>
+          </div>
+          <label for="drop" class="toggle">Menu</label>
+          <input type="checkbox" id="drop">
+            <ul class="menu mt-2">
+                <li class="active"><a href="/home">首页</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1 active"><a href="/home/about">测评</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="/home/counselling">咨询</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="../confide/index.html">树洞</a></li>
+                <li class="mx-lg-3 mx-md-2 my-md-0 my-1" id="chatLi" style="display: none;">
+
+                    <!--                    <a href="/home/message">我的消息</a>-->
+<!--                    <button :userId="loginUser.userId" :toUserId="user.userId" class="layui-btn layui-btn-normal chat" data-type="auto" data-method="offset">聊天</button>-->
+                </li>
+                <li>
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        我
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/self/index">个人中心</a>
+                        <a class="dropdown-item" href="/user/login_page">登录</a>
+                        <a class="dropdown-item" href="/logout">退出登录</a>
+                    </div>
+                </li>
+                <!--                <li class="mx-lg-3 mx-md-2 my-md-0 my-1"><a href="/home/contact">联系我们</a></li>-->
+            </ul>
+        </nav>
+        <!-- //nav -->
+      </div>
+    </div>
+    <!--//headder-->
+    <!-- short -->
+    <div class="using-border py-3">
+      <div class="inner_breadcrumb  ml-4">
+        <ul class="short_ls">
+          <li>
+            <a href="/home">Home</a>
+            <span>/ /</span>
+          </li>
+          <li>About</li>
+        </ul>
+      </div>
+    </div>
+
+   <section class="stats-count py-lg-4 py-md-3 py-sm-3 py-3">
+      <div class="container-fluid py-lg-4 py-md-4 py-sm-4 py-3">
+        <div class="row text-center">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info ">
+           <span class="fa fa-plus" data-blast="bgColor"></span>
+		   <h5>健康</h5>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+           <span class="fa fa-smile-o" data-blast="bgColor"></span>
+		   <h5>性格</h5>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+            <span class="fa fa-line-chart" data-blast="bgColor"></span>
+			<h5>能力</h5>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+            <span class="fa fa-heart-o" data-blast="bgColor"></span>
+			<h5>婚恋</h5>
+          </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+                <span class="fa fa-share-alt" data-blast="bgColor"></span>
+                <h5>人际</h5>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+                <span class="fa fa-suitcase" data-blast="bgColor"></span>
+                <h5>职场</h5>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+                <span class="fa  fa-mortar-board" data-blast="bgColor"></span>
+                <h5>亲子</h5>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-6 number-w3three-info">
+                <span class="fa fa-venus-mars" data-blast="bgColor"></span>
+                <h5>性心理</h5>
+            </div>
+        </div>
+      </div>
+    </section>
+    <!--//stats -->
+	<section class="blog_w3ls py-3" id="why">
+		<div class="container py-xl-5" style="border-top: 1px solid #bdbdbd;">
+			<h3 class="title mb-lg-3 mb-md-3 mb-sm-3 mb-2">热门测评</h3>
+            <p class="mb-lg-3 mb-md-3 mb-sm-3 mb-2">仅供娱乐，非专业心理指导。</p>
+			<div class="row">
+				<!-- blog grid -->
+				<div class="col-lg-4 col-md-6" v-cloak v-for="paper in papersTop">
+					<div class="card border-0 med-blog">
+                        <a :href=" '/test?paperId=' + paper.id ">
+                            <div class="card-header p-0">
+                                <img class="card-img-bottom" :src=" '../updateFile/img/paper/' + paper.img " alt="图片加载失败">
+                            </div>
+                            <div class="card-body border border-top-0">
+                                <div class="mb-3">
+                                    <h5 class="blog-title card-title m-0">{{ paper.paperName }}
+                                    </h5>
+                                    <div class="blog_w3icon">
+                                        <span>类型：{{ paper.type.typeName }}</span>
+                                    </div>
+                                </div>
+                                <p style="font-size: 18px;">{{ paper.description }}</p>
+                                <p style="color: gray; font-size: 5px">{{ paper.numbers }}人测过</p>
+                            </div>
+                        </a>
+					</div>
+				</div>
+
+			</div>
+
+            <div class="row mt-2">
+                <div class="col-12">
+                    <button type="button" class="col-12 btn text-center" @click="goToPaper()">更多测评</button>
+                </div>
+            </div>
+
+		</div>
+	</section>
+    <!-- footer -->
+    <footer class="py-lg-4 py-md-3 py-sm-3 py-3">
+      <div class="container py-lg-5 py-md-5 py-sm-4 py-3">
+        <div class="footer-w3layouts-head text-center">
+          <h2><a href="home.html">Mulching</a></h2>
+        </div>
+        <div class="social-icons mt-lg-5 mt-md-4 mt-3 text-center">
+          <ul>
+            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+            <li><a href="#"><span class="fa fa-rss"></span></a></li>
+            <li><a href="#"><span class="fa fa-envelope"></span></a></li>
+            <li><a href="#"><span class="fa fa-instagram"></span></a></li>
+          </ul>
+        </div>
+        <!-- move icon -->
+        <div class="text-center">
+          <a href="#home" class="move-top text-center mt-3"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
+        <!--//move icon -->
+      </div>
+    </footer>
+    <!--//footer -->
+  </div>
+  </body>
+</html>
+
+
+<script src="../vendor/jquery/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="../js/vue.js" type="text/javascript"></script>
+<script src="../js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../plugin/layui/layui.js" charset="utf-8"></script>
+
+<script src="../js/message.js"></script>
+<script src="../js/home_my.js"></script>
+
+

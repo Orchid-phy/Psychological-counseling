@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.UserMapper">
+
+<!--    查询用户角色是否为咨询师-->
+    <select id="selUserRole" parameterType="String" resultType="int">
+         SELECT count(*) FROM user u join role r
+         on u.role_id = r.role_id
+         and r.role_name = '咨询师'
+         and u.username = #{username}
+    </select>
+
+<!--    根据用户id查询用户信息-->
+    <select id="selectUserById" resultType="User" parameterType="int">
+        select * from user where user_id = ${userId};
+    </select>
+
+<!--    根据用户名查询用户id-->
+    <select id="selUserIdByName" parameterType="String" resultType="long">
+        SELECT user_id from user WHERE username = #{username}
+    </select>
+
+    <resultMap id="selectUserByNameMap" type="User">
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="salt" column="salt"></result>
+        <association property="role" javaType="Role">
+            <id property="roleId" column="role_id"></id>
+        </association>
+    </resultMap>
+
+<!--    根据用户名查询用户信息  登录-->
+    <select id="selectUserByName" resultMap="selectUserByNameMap" parameterType="String">
+        SELECT username, password, salt, role_id from user where username = #{username}
+    </select>
+
+    <resultMap id="selectAllInfoByNameMap" type="User">
+        <id property="userId" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="realName" column="real_name"></result>
+        <result property="password" column="password"></result>
+        <result property="salt" column="salt"></result>
+        <result property="img" column="img"></result>
+        <result property="age" column="age"></result>
+        <result property="email" column="email"></result>
+        <result property="phone" column="phone"></result>
+        <result property="idCard" column="id_card"></result>
+        <result property="sex" column="sex"></result>
+        <association property="role" javaType="Role">
+            <id property="roleId" column="role_id"></id>
+            <result property="roleName" column="role_name"></result>
+        </association>
+    </resultMap>
+
+<!--    根据用户名查询用户信息-->
+    <select id="selectAllInfoByUsername" parameterType="String" resultMap="selectAllInfoByNameMap">
+        SELECT user_id, username, real_name, password, salt,
+        u.role_id, u.age, u.email, u.phone,u.id_card, u.sex,
+        role_name, img
+        from user u join role r
+        on u.role_id = r.role_id
+        and u.username = #{username}
+    </select>
+
+<!--    用户注册，插入信息-->
+    <insert id="insertUser" parameterType="User">
+        INSERT INTO user(username, real_name,password,salt,phone,role_id,create_time)
+        VALUES(#{username}, #{realName}, #{password}, #{salt}, #{phone},
+        <if test="role.roleName != null">
+         (SELECT role_id from role WHERE role_name like #{role.roleName})
+        </if>
+        <if test="role.roleName == null">
+            default
+        </if>
+         ,now())
+    </insert>
+
+<!--    批量插入多个用户信息，密码默认为1234-->
+    <insert id="insertMoreUser" parameterType="List">
+        INSERT INTO user(username, real_name,password,salt,create_time)
+        VALUES
+        <foreach collection="list" index="index" item="user" separator=",">
+            ( #{user.username}, #{user.realName}, 'a98447d906a7c4f3c830e8602cddc05a', '0b4f3', now() )
+        </foreach>
+    </insert>
+
+<!--完善信息，修改个人信息-->
+    <update id="updateInfo" parameterType="User">
+        UPDATE user SET
+        username = #{username},
+        real_name = #{realName},
+        age = #{age},
+        sex = #{sex},
+        ID_card = #{idCard},
+        email = #{email},
+        phone = #{phone}
+        WHERE user_id = #{userId};
+    </update>
+
+    <resultMap id="selectUserByAdminMap" type="User">
+        <id property="userId" column="user_id"></id>
+        <result property="username" column="username"></result>
+        <result property="realName" column="real_name"></result>
+        <result property="password" column="password"></result>
+        <result property="salt" column="salt"></result>
+        <result property="idCard" column="ID_card"></result>
+        <result property="phone" column="phone"></result>
+        <result property="email" column="email"></result>
+        <result property="sex" column="sex"></result>
+        <result property="age" column="age"></result>
+        <result property="createTime" column="create_time"></result>
+        <association property="role" javaType="Role">
+            <result property="roleName" column="role_name"></result>
+        </association>
+    </resultMap>
+
+<!--    管理员查看用户信息-->
+    <select id="selectUserByAdmin" parameterType="ParaVo" resultMap="selectUserByAdminMap">
+        SELECT u.*, r.role_name from user u join group_user gu join group_my gm join role r
+        on u.user_id = gu.user_id
+        and gu.group_id = gm.group_id
+        and u.role_id = r.role_id
+        <where>
+            <if test=" para != null ">
+                and gm.administrator_id = (SELECT user_id from user where username = #{para})
+            </if>
+            <if test="user.username != null">
+                and u.username like #{user.username}
+            </if>
+            <if test="user.userId != 0 ">
+                and u.user_id = #{user.userId}
+            </if>
+        </where>
+    </select>
+
+<!--    查询咨询师信息-->
+    <select id="selCounselorByGroup" parameterType="String" resultType="User">
+        SELECT user_id, username, phone, sex, img, email FROM user u join role r
+        on u.role_id = r.role_id
+        and r.role_name like '%咨询师%'
+        <where>
+            <if test="username != null">
+                and group_id = (SELECT group_id FROM user WHERE username = #{username})
+            </if>
+        </where>
+        ORDER BY u.create_time asc
+    </select>
+    
+<!--    根据用户id删除用户-->
+    <delete id="delUserById" parameterType="long">
+        delete from user where user_id = #{userId}
+    </delete>
+
+
+</mapper>
+

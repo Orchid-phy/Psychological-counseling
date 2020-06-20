@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.CommentMapper">
+
+<!--   添加评论信息-->
+    <insert id="inComments" parameterType="Comment">
+        INSERT INTO comment(id, confide_id, user_id, comments, create_time)
+        VALUES(null, #{confide.id}, #{user.userId}, #{comments}, now())
+    </insert>
+
+</mapper>
+

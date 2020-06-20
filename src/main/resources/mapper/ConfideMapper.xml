@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.orchid.counselling.mapper.ConfideMapper">
+
+    <resultMap id="selMessageMap" type="Confide">
+        <id column="id" property="id"></id>
+        <result column="comments" property="comments"></result>
+        <collection property="commentList" column="id" javaType="ArrayList"
+                    ofType="Comment" select="selCommentByConId"></collection>
+    </resultMap>
+
+    <!--    查询用户动态消息，可根据用户id查询 -->
+    <select id="selMessage" parameterType="Long" resultMap="selMessageMap">
+        SELECT * FROM confide
+        <where>
+            <if test="userId != null">
+                user_id = #{userId}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!--    根据动态的id查询评论-->
+    <select id="selCommentByConId" parameterType="int" resultType="Comment">
+        SELECT * FROM comment WHERE confide_id = #{commentId} ORDER BY create_time DESC
+    </select>
+
+</mapper>
+

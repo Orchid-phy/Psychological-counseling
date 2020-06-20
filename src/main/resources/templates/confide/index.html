@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Bootstrap Blog - B4 Template by Bootstrap Temple</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="../vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Custom icon font-->
+    <link rel="stylesheet" href="../css/fontastic.css">
+    <!-- Google fonts - Open Sans-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+    <!-- Fancybox-->
+    <link rel="stylesheet" href="../vendor/@fancyapps/fancybox/jquery.fancybox.min.css">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="../css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="../css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="../favicon.png">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  </head>
+  <body>
+  <div id="confide">
+    <header class="header">
+      <!-- Main Navbar-->
+      <nav class="navbar navbar-expand-lg">
+        <div class="search-area">
+          <div class="search-area-inner d-flex align-items-center justify-content-center">
+            <div class="close-btn"><i class="icon-close"></i></div>
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-8">
+                <form action="#">
+                  <div class="form-group">
+                    <input type="search" name="search" id="search" placeholder="What are you looking for?">
+                    <button type="submit" class="submit"><i class="icon-search-1"></i></button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <!-- Navbar Menu -->
+          <div id="navbarcollapse" class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item"><a href="index.html" class="nav-link active ">主页</a>
+              </li>
+              <li class="nav-item"><a href="blog.html" class="nav-link ">动态</a>
+              </li>
+              <li class="nav-item" v-if="loginUser != null && loginUser.userId != null"><a href="post.html" class="nav-link ">我的</a>
+              </li>
+              <li class="nav-item"><a href="/home" class="nav-link ">首页</a>
+              </li>
+            </ul>
+        </div>
+        </div>
+      </nav>
+    </header>
+    <!-- Hero Section-->
+    <section style="background: url('../img/hero.jpg'); background-size: cover; background-position: center center;" class="hero">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <h1>我愿意听，请相信我一次。</h1><a href="post.html" class="hero-link">尝试一下</a>
+          </div>
+        </div><a href=".intro" class="continue link-scroll"><i class="fa fa-long-arrow-down"></i> 或者看一下 </a>
+      </div>
+    </section>
+
+    <section class="featured-posts no-padding-top intro">
+      <div v-cloak class="container">
+
+        <div class="row" style="margin: 20px auto;">
+          <div class="col-12">
+            <button type="button" v-if="isCounselor" class="btn btn-default" id="post_article_btn" style="float: right; " onclick="showAddArticle()">发表文章</button>
+          </div>
+        </div>
+
+        <div class="row"  id="post_article" style="display: none;">
+          <div class="col-12">
+            <form action="/addArticle" method="post" enctype="multipart/form-data" >
+              <div class="form-group">
+                <label for="title">文章标题</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="点击输入文章标题">
+              </div>
+              <div class="form-group">
+                <label>文章内容</label>
+                <div id="editor">
+                  <p>点击输入文章内容</p>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-default">提交</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Post-->
+        <div v-cloak class="row d-flex align-items-stretch" v-for="article in articles">
+          <div class="text col-lg-7">
+            <div class="text-inner d-flex align-items-center">
+              <div class="content">
+                <header class="post-header">
+                  <div class="category">
+                    <a href="#"></a><a href="#">Technology</a>
+                  </div>
+                  <a href="post.html">
+                    <h2 class="h4">{{ article.title }}</h2>
+                  </a>
+                </header>
+                <p>{{ article.content }}</p>
+                <footer class="post-footer d-flex align-items-center"><a href="#" class="author d-flex align-items-center flex-wrap">
+                    <div class="avatar"><img :src=" '../updateFile/img/confide/' + article.author.img " alt="..." class="img-fluid"></div>
+                    <div class="title"><span>{{ article.author.username }}</span></div></a>
+                  <div class="date"><i class="icon-clock"></i> {{ article.createTime }}</div>
+<!--                  <div class="comments"><i class="icon-comment"></i>12</div>-->
+                </footer>
+              </div>
+            </div>
+          </div>
+          <div class="image col-lg-5"><img src="../img/featured-pic-1.jpeg" alt="..."></div>
+        </div>
+		
+      </div>
+    </section>
+
+    <div class="card-footer text-right">
+      <!--              <nav v-cloak>-->
+      <!--                <p>当前 <span>{{ groupPageNum }}</span> 页,总 <span>{{ groupPages }}</span> 页,共 <span>{{ groupTotal }}</span> 条记录</p>-->
+      <!--              </nav>-->
+      <nav class="d-inline-block">
+        <ul class="pagination mb-0">
+          <li class="page-item">
+            <a class="page-link" v-on:click="getArticle()">首页 </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" v-on:click="getArticle(articlePageInfo.hasPreviousPage ? articlePageInfo.prePage : 1)">上一页</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" v-on:click="getArticle(articlePageInfo.hasNextPage ? articlePageInfo.nextPage : articlePageInfo.pages)">下一页</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" v-on:click="getArticle(articlePageInfo.pages)">尾页</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+
+    <div class="tlinks">Orchid</a></div>
+
+    <!-- Page Footer-->
+    <footer class="main-footer">
+      <div class="copyrights">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <p>&copy; 2017. Bootstrapious All rights reserved. Your great site.</p>
+            </div>
+            <div class="col-md-6 text-right">
+              More Templates - Collect from 
+                
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+    <!-- JavaScript files-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../vendor/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="../vendor/@fancyapps/fancybox/jquery.fancybox.min.js"></script>
+    <script src="../js/front.js"></script>
+  <script src="../plugin/release/wangEditor.min.js"></script>
+
+  <script src="../js/vue.js" type="text/javascript"></script>
+  <script src="../js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src="../js/confide.js"></script>
+
+
+  <script>
+
+    function showAddArticle() {
+
+      var flag = $("#post_article").is(":hidden");
+
+      if (flag) {
+        //show() 方法: 使隐藏的变为显示
+        $("#post_article").show();
+      } else {
+        $("#post_article").hide();
+      }
+
+    }
+
+    //加载富文本
+    var E = window.wangEditor
+    var editor = new E('#editor')
+    // 或者 var editor = new E( document.getElementById('editor') )
+    editor.create()
+
+    editor.txt.html()
+
+
+  </script>
+
+  </body>
+</html>
